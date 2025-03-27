@@ -1,0 +1,17 @@
+GET http://localhost:3000/categories
+
+###
+Post http://localhost:3000/category
+Content-Type: application/json
+
+ {"name": "Test test test!!!"}
+
+###
+
+Put http://localhost:3000/category/6
+Content-Type: application/json
+
+ {"name": "soins"}
+
+###
+Delete http://localhost:3000/category/6

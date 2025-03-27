@@ -1,0 +1,36 @@
+GET http://localhost:3000/ads
+
+###
+
+GET http://localhost:3000/ads/category/véhicules
+
+###
+
+Post http://localhost:3000/ad
+Content-Type: application/json
+
+ {
+    "title": "Test test test!!!",
+    "description":"A new book",
+    "owner": "car.seller@gmail.com",
+    "price": 10000,
+    "image":"https://www.automobile-magazine.fr/asset/cms/34973/config/28294/apres-plusieurs-prototypes-la-bollore-bluecar-a-fini-par-devoiler-sa-version-definitive.jpg",
+    "createdAt": "01-01-01",
+    "location": "Paris",
+    "category" : 1,
+    "tags" : [{"id": 1}, {"id": 4}]
+  }
+
+
+###
+Put http://localhost:3000/ad/21
+Content-Type: application/json
+
+{
+    "title": "New update"
+  }
+
+
+###
+
+Delete http://localhost:3000/ad/22
