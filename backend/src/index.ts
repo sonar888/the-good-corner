@@ -29,6 +29,13 @@ app.get('/ads', async(_req, res)=>{
     
 })
 
+app.get('/ad/:id', async(req, res)=> {
+  const ad = await Ad.findOneByOrFail({
+    id: Number.parseInt(req.params.id)
+  })
+  res.send(ad)
+})
+
 
 
 app.post('/ad', async (req, res)=>{

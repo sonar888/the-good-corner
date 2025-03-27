@@ -22,7 +22,7 @@ export default function AdsInCategory () {
 
  useEffect(()=>{
   fetchData()
- }, [])
+ }, [name])
 
  
 
@@ -31,7 +31,7 @@ export default function AdsInCategory () {
       <div key={ad.id}>
         <AdCard 
           image= {ad.image}
-          link= {ad.link}
+          link= {`http://localhost:5173/ad/${ad.id}`}
           title= {ad.title}
           price = {ad.price}/>
       </div>

@@ -24,7 +24,7 @@ export default function App() {
           <Route path='/tags/new' element={<NewTagForm/>}/>
           <Route path='/categories/new' element={<NewCategoryForm/>}/>
           <Route path='/ad/:id' element={<AdDetails />}/>
-          <Route path='/ads/category' element={<AdsInCategory/>}/>
+          <Route path='/ads/category/?' element={<AdsInCategory/>}/>
         </Route>
       </Routes>
       
