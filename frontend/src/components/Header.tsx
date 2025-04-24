@@ -1,5 +1,5 @@
 
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -13,6 +13,7 @@ export default function Header () {
 
   //Getting the categories from the backend to add to the form
       const [categories, setCategories] = useState<categoryProps[]>([])
+      const navigate = useNavigate()
       
       async function  getCategories() {
           const results = await axios.get<categoryProps[]>("http://localhost:3000/categories")
@@ -36,6 +37,17 @@ export default function Header () {
 
       })
 
+     
+      
+      function Search(e:React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        const form = e.target 
+        const formData = new FormData(form as HTMLFormElement)
+        const formJson = Object.fromEntries(formData.entries());
+        navigate(`/ads/search/${formJson.keyword}`)
+      }
+
     return (
         <header className="header">
         <div className="main-menu">
@@ -45,8 +57,8 @@ export default function Header () {
               <span className="desktop-long-label">THE GOOD CORNER</span>
             </Link>
           </h1>
-          <form className="text-field-with-button">
-            <input className="text-field main-search-field" type="search" />
+          <form className="text-field-with-button" onSubmit={Search}>
+            <input className="text-field main-search-field" type="search" name="keyword" />
             <button className="button button-primary">
               <svg
                 aria-hidden="true"

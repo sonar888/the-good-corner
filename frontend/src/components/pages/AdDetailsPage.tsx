@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
+import {toast} from "react-toastify"
 import axios from "axios"
 
 
@@ -11,7 +12,10 @@ type AdDetailsProps = {
     image: string;
     location: string;
     createdAt: Date;
-    category: number;
+    category: {
+        id: number;
+        name: string
+    };
     tags: [{
         id: number;
         name: string
@@ -22,9 +26,10 @@ type AdDetailsProps = {
 
 export default function AdDetails () {
     const {id} = useParams()
-    console.log(id)
+    const navigate = useNavigate()
 
     const [ad, setAd] = useState<AdDetailsProps>()
+    
 
     async function getAd() {
         const result = await axios.get<AdDetailsProps>(`http://localhost:3000/ad/${id}`)
@@ -36,10 +41,27 @@ export default function AdDetails () {
     useEffect(()=> {
         getAd()
     }, [id])
+
+    async function deleteAd() {
+        try {
+            await axios.delete(`http://localhost:3000/ad/${id}`) 
+            toast.success("Ad was deleted")
+            navigate('/')
+            
+        } catch(error) {
+            console.log(error)
+            toast.error("An error occurred")
+        }
+
+    }
+
+    function updateAd() {
+        navigate(`/ad/update/${id}`)
+    }
     
     if(ad === undefined) {
         console.log("loading")
-        return <p>Loading</p>
+        return <p>No ad found with this id</p>
     }
 
     return (
@@ -48,7 +70,7 @@ export default function AdDetails () {
             <h2 className="ad-details-title">{ad.title}</h2>
                 <section className="ad-details">
                     <div className="ad-details-image-container">
-                    <img className="ad-details-image" src="/images/table.webp" />
+                    <img className="ad-details-image" src={ad.image} />
                     </div>
                     <div className="ad-details-info">
                     <div className="ad-details-price">{ad.price} €</div>
@@ -57,7 +79,7 @@ export default function AdDetails () {
                     </div>
                     <hr className="separator" />
                     <div className="ad-details-owner">
-                        Annoncée publiée par <b>{ad.owner}</b> {new Date(ad.createdAt).toLocaleDateString()}.
+                        Annoncée publiée par <b>{ad.owner}</b> {new Date(ad.createdAt).toLocaleDateString()} dans la catégorie {ad.category.name}.
                     </div>
                     <a
                         href="mailto:serge@serge.com"
@@ -76,6 +98,9 @@ export default function AdDetails () {
                         ></path>
                         </svg>
                         Envoyer un email</a>
+
+                        <button className="button" onClick={()=>deleteAd()}>Supprimer l'annonce</button>
+                        <button className="button" onClick={()=>updateAd()}>Modifier l'annonce</button>
                     </div>
                 </section>
         </>

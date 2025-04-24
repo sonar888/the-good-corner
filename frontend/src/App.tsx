@@ -9,6 +9,8 @@ import NewAdForm from './components/pages/NewAdForm';
 import AdsInCategory from './components/AdsInCategory';
 import NewCategoryForm from './components/pages/NewCategoryForm'
 import NewTagForm from './components/pages/NewTagForm';
+import SearchPage from './components/pages/Search';
+import UpdateAdPage from './components/pages/UpdateAdPage'
 
 
 
@@ -25,6 +27,8 @@ export default function App() {
           <Route path='/categories/new' element={<NewCategoryForm/>}/>
           <Route path='/ad/:id' element={<AdDetails />}/>
           <Route path='/ads/category/?' element={<AdsInCategory/>}/>
+          <Route path='/ads/search/:keyword' element={<SearchPage/>}/>
+          <Route path='/ad/update/:id' element={<UpdateAdPage/>}/>
         </Route>
       </Routes>
       

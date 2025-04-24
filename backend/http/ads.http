@@ -6,6 +6,10 @@ GET http://localhost:3000/ads/category/véhicules
 
 ###
 
+GET http://localhost:3000/ads/search/table
+
+###
+
 Post http://localhost:3000/ad
 Content-Type: application/json
 
@@ -33,4 +37,4 @@ Content-Type: application/json
 
 ###
 
-Delete http://localhost:3000/ad/22
+Delete http://localhost:3000/ad/12

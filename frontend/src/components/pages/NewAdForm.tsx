@@ -1,6 +1,6 @@
 import axios from "axios"
 import {useEffect, useState } from "react"
-import {useForm, SubmitHandler} from "react-hook-form";
+import {useForm, SubmitHandler, useFieldArray} from "react-hook-form";
 import { toast } from "react-toastify"
 
 // price accepts string
@@ -13,6 +13,8 @@ type categoryProps = {
     name: string
 }
 
+type tagsProps = categoryProps
+
 type formInputProps = {
     title: string;
     description: string;
@@ -20,13 +22,17 @@ type formInputProps = {
     price: number;
     location: string;
     image: string;
-    category: categoryProps
+    category: categoryProps;
+    tags: [string]
 }
+
+
 
 export default function NewAdForm () {
 
 //Getting the categories from the backend to add to the form
     const [categories, setCategories] = useState<categoryProps[]>([])
+    const [tags, setTags] = useState<tagsProps[]>([])
     
     async function  getCategories() {
         const results = await axios.get<categoryProps[]>("http://localhost:3000/categories")
@@ -34,21 +40,40 @@ export default function NewAdForm () {
         setCategories(results.data)
     }
 
-    useEffect(() => {getCategories()}, [])
+    async function  getTags() {
+        const results = await axios.get<tagsProps[]>("http://localhost:3000/tags")
+        console.log(results)
+        setTags(results.data)
+    }
 
-    const children = categories.map((category) => {
+    useEffect(() => {
+        getCategories()
+        getTags()
+    
+    }, [])
+
+    const categoriesChildren = categories.map((category) => {
         return (
             <option value={category.id} key={category.id}>{category.name}</option>
         )
     })
 
+    
+
 
 
 // Handling the input defaultValue="" from the form
 
-const { register, handleSubmit, formState: {errors}} = useForm<formInputProps>()
+const { register, handleSubmit,  formState: {errors}} = useForm<formInputProps>()
+
+
+
+
+
+
 
     const handleForm: SubmitHandler<formInputProps> = (data) =>  {
+        
         axios.post("http://localhost:3000/ad", {...data})
           .then((response) => {
                 toast.success("Success")
@@ -116,9 +141,24 @@ const { register, handleSubmit, formState: {errors}} = useForm<formInputProps>()
             <label>
                 La catégorie
                 <select {...register("category", {required: true})}>
-                    {children}
+                    {categoriesChildren}
                 </select>
             </label>
+
+            <div>
+                Sélectionne les tags: 
+                {tags.map((tag)=>{
+                    return (
+                        <div key={tag.id}>
+                            <label >
+                                {tag.name}
+                                <input value={tag.id} type="checkbox" key={tag.id} {...register(`tags`)} />
+                            </label> 
+                        </div>
+                           
+        )
+    })}
+            </div>
             <button className="button">Envoyer</button>
         </form>
     )
