@@ -2,7 +2,7 @@ import express from "express";
 import "reflect-metadata";
 import {Ad} from "./entities/Ad";
 import {dataSource} from "./config/db";
-import { MoreThan } from "typeorm";
+import { ILike } from "typeorm";
 import { Tag } from "./entities/Tag";
 import { Category } from "./entities/Category";
 import cors from "cors"
@@ -46,8 +46,59 @@ app.post('/ad', async (req, res)=>{
 })
 
 app.put('/ad/:id', async(req, res) => {
-  await Ad.update({id : Number.parseInt(req.params.id)}, req.body)
-  res.send("Ad has been updated")
+  try {
+    const adToUpdate = await Ad.findOneByOrFail({id : Number.parseInt(req.params.id)})
+    console.log(adToUpdate)
+
+    //Version initiale:
+
+    // adToUpdate.title = req.body.title ? req.body.title : adToUpdate.title 
+    // adToUpdate.description = req.body.description ? req.body.description : adToUpdate.description 
+    // adToUpdate.owner = req.body.owner ? req.body.owner : adToUpdate.owner 
+    // adToUpdate.location = req.body.location ? req.body.location : adToUpdate.location 
+    // adToUpdate.price = req.body.price ? req.body.price : adToUpdate.price 
+    // adToUpdate.image = req.body.image ? req.body.image : adToUpdate.image
+    // adToUpdate.category = req.body.category ? req.body.category : adToUpdate.category
+    // adToUpdate.tags = req.body.tags ? req.body.tags.map((tag:string)=>({id: Number.parseInt(tag)})) : adToUpdate.tags
+
+    // await adToUpdate.save()
+    // res.send("Ad has been updated")
+    
+
+    //Version par chatGPT
+
+    // const adToUpdate = await Ad.findOneByOrFail({ id: Number.parseInt(req.params.id) });
+    // console.log(adToUpdate);
+
+    // const { title, description, owner, location, price, image, category, tags } = req.body;
+
+    // Object.assign(adToUpdate, {
+    // title: title ?? adToUpdate.title,
+    // description: description ?? adToUpdate.description,
+    // owner: owner ?? adToUpdate.owner,
+    // location: location ?? adToUpdate.location,
+    // price: price ?? adToUpdate.price,
+    // image: image ?? adToUpdate.image,
+    // category: category ?? adToUpdate.category,
+    // tags: tags ? tags.map((tag: string) => ({ id: Number.parseInt(tag) })) : adToUpdate.tags
+    // });
+
+    // await adToUpdate.save();
+    // res.send("Ad has been updated");
+
+
+  //Version optimisée en utilisant la merge
+    Ad.merge(adToUpdate, req.body);
+     adToUpdate.tags = req.body.tags
+       ? req.body.tags.map((el: string) => ({ id: Number.parseInt(el) }))
+       : adToUpdate.tags;
+    await adToUpdate.save();
+    res.send("Ad has been updated");
+
+  } catch (error) {
+    res.status(500).send(error)
+    
+  }
 
 })
 
@@ -60,13 +111,39 @@ app.delete('/ad/:id', async (req, res) => {
 // Ads by category
 
 app.get('/ads/category/:name', async(req, res)=> {
-  const ads = await Ad.findBy({
-    category: {
-      name: req.params.name
-    }
+  try {
+    const ads = await Ad.findBy({
+      category: {
+        name: req.params.name
+      }
+      
+    });
     
-  });
-  res.send(ads);
+    res.send(ads);
+
+  } catch(error) {
+    res.status(500).send(error)
+
+  }
+  
+})
+
+//Ads by search
+
+app.get('/ads/search/:keyword', async(req , res) => {
+  try {
+    const ads = await Ad.find({
+      where: { title: ILike(`%${req.params.keyword}%`) }
+      
+
+    })
+    res.send(ads)
+    console.log(req.params.keyword)
+
+  } catch(err) {
+    console.log(err)
+
+  }
 })
 
 
@@ -96,8 +173,13 @@ app.post('/category', async(req, res) => {
 })
 
 app.put('/category/:id', async (req, res) => {
-  await Category.update({id : Number.parseInt(req.params.id)}, req.body)
+  try {
+    await Category.update({id : Number.parseInt(req.params.id)}, req.body)
   res.send("the category has been updated")
+  } catch(error){
+    console.log(error)
+    res.status(500).send(error)
+  }
 })
 
 app.delete('/category/:id', async (req, res) =>{
@@ -129,8 +211,16 @@ app.put('/tag/:id', async (req , res)=> {
 })
 
 app.delete('/tag/:id', async (req , res) => {
-  Tag.delete({id: Number.parseInt(req.params.id)})
+  try {
+    Tag.delete({id: Number.parseInt(req.params.id)})
   res.send("Tag deleted")
+
+  } catch(error) {
+    res.status(500).send('this add does not exist')
+    console.log(error)
+
+  }
+  
 })
 
 
