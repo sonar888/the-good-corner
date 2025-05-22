@@ -1,44 +1,17 @@
 
 import { Link, useNavigate } from "react-router";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useGetAllCategoriesQuery } from "../generated/graphql-types";
 
 
-type categoryProps = {
-  id: number;
-  name: string
-}
+
 
 export default function Header () {
 
+  const {data, loading, error} = useGetAllCategoriesQuery();
+
   //Getting the categories from the backend to add to the form
-      const [categories, setCategories] = useState<categoryProps[]>([])
       const navigate = useNavigate()
-      
-      async function  getCategories() {
-          const results = await axios.get<categoryProps[]>("http://localhost:3000/categories")
-          // console.log(results)
-          setCategories(results.data)
-      }
-  
-      useEffect(() => {getCategories()}, [])
-
-      const children = categories.map((category) => {
-        return (
-          <div key={category.id}>
-             <Link to={`/ads/category?name=${category.name}`} className="category-navigation-link" >
-              {category.name}
-            </Link>{" "}
-            •
-          </div>
-         
-        )
-
-
-      })
-
-     
-      
+              
       function Search(e:React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
@@ -47,6 +20,15 @@ export default function Header () {
         const formJson = Object.fromEntries(formData.entries());
         navigate(`/ads/search/${formJson.keyword}`)
       }
+
+
+    if (loading) {
+      return <p>Patience, ça charge</p>
+    }
+
+    if (error){
+      return <p>Oops! Something went wrong...</p>
+    }
 
     return (
         <header className="header">
@@ -89,7 +71,19 @@ export default function Header () {
           </Link>
         </div>
         <nav className="categories-navigation">
-          {children}
+        {data?.getAllCategories.map((category) => {
+        return (
+          <div key={category.id}>
+             <Link to={`/ads/category?name=${category.name}`} className="category-navigation-link" >
+              {category.name}
+            </Link>{" "}
+            •
+          </div>
+         
+        )
+
+
+      })}
         </nav>
       </header>
     )

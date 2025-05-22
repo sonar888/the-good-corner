@@ -1,12 +1,19 @@
+import * as dotenv from "dotenv"
 import { DataSource } from "typeorm";
 import { Ad } from "../entities/Ad";
 import {Category} from "../entities/Category";
 import { Tag } from "../entities/Tag";
 
+dotenv.config();
+const {DB_HOST, DB_DATABASE, DB_USER, DB_PASSWORD} = process.env;
+
 export const dataSource = new DataSource({
-    type: "sqlite",
-    database: "good_corner.sqlite",
+    type: "postgres",
+    host: DB_HOST,
+    username: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_DATABASE,
     entities: [Ad, Category, Tag],
     synchronize: true,
-    logging: ["error", "query"]
+    // logging: ["error", "query"]
 });

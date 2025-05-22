@@ -1,85 +1,50 @@
-import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import {toast} from "react-toastify"
-import axios from "axios"
+import { useGetOneAdQuery, useDeleteAdMutation } from "../../generated/graphql-types"
 
 
-type AdDetailsProps = {
-    title: string;
-    description: string;
-    owner: string;
-    price: number;
-    image: string;
-    location: string;
-    createdAt: Date;
-    category: {
-        id: number;
-        name: string
-    };
-    tags: [{
-        id: number;
-        name: string
-    }]
 
-}
 
 
 export default function AdDetails () {
     const {id} = useParams()
     const navigate = useNavigate()
+    const {data, error, loading} = useGetOneAdQuery({
+        variables: { adId: Number(id) },
+      })
+    const [deleteAd] = useDeleteAdMutation({
+        variables: {deleteAdId:Number(id)}
+    })
 
-    const [ad, setAd] = useState<AdDetailsProps>()
     
-
-    async function getAd() {
-        const result = await axios.get<AdDetailsProps>(`http://localhost:3000/ad/${id}`)
-        console.log(result.data)
-        setAd(result.data)
-        console.log(ad)
-    }
-
-    useEffect(()=> {
-        getAd()
-    }, [id])
-
-    async function deleteAd() {
-        try {
-            await axios.delete(`http://localhost:3000/ad/${id}`) 
-            toast.success("Ad was deleted")
-            navigate('/')
-            
-        } catch(error) {
-            console.log(error)
-            toast.error("An error occurred")
-        }
-
-    }
 
     function updateAd() {
         navigate(`/ad/update/${id}`)
     }
     
-    if(ad === undefined) {
-        console.log("loading")
-        return <p>No ad found with this id</p>
-    }
+   if (loading) {
+    return <p>Loading...</p>
+   }
 
-    return (
-        
+   if(error) {
+    return <p>We didn't start the fire...</p>
+   }
+
+    return (  
         <>
-            <h2 className="ad-details-title">{ad.title}</h2>
+            <h2 className="ad-details-title">{data?.getOneAd.title}</h2>
                 <section className="ad-details">
                     <div className="ad-details-image-container">
-                    <img className="ad-details-image" src={ad.image} />
+                    <img className="ad-details-image" src={data?.getOneAd.image} />
                     </div>
                     <div className="ad-details-info">
-                    <div className="ad-details-price">{ad.price} €</div>
+                    <div className="ad-details-price">{data?.getOneAd.price} €</div>
                     <div className="ad-details-description">
-                        {ad.description}
+                        {data?.getOneAd.description}
                     </div>
                     <hr className="separator" />
                     <div className="ad-details-owner">
-                        Annoncée publiée par <b>{ad.owner}</b> {new Date(ad.createdAt).toLocaleDateString()} dans la catégorie {ad.category.name}.
+                        Annoncée publiée par <b>{data?.getOneAd.owner}</b> {new Date(data?.getOneAd.createdDate).toLocaleDateString()} dans la catégorie {data?.getOneAd.category.name}.
                     </div>
                     <a
                         href="mailto:serge@serge.com"
@@ -99,7 +64,18 @@ export default function AdDetails () {
                         </svg>
                         Envoyer un email</a>
 
-                        <button className="button" onClick={()=>deleteAd()}>Supprimer l'annonce</button>
+                        <button className="button" onClick={
+                            async () => {
+                                try {
+                                  await deleteAd({ variables: { deleteAdId: Number(id) } });
+                                  navigate("/");
+                                  toast.success("Ad has been deleted");
+                                } catch (err) {
+                                  console.log(err);
+                                  toast.error("An error occurred");
+                                }
+                              }
+                        }>Supprimer l'annonce</button>
                         <button className="button" onClick={()=>updateAd()}>Modifier l'annonce</button>
                     </div>
                 </section>

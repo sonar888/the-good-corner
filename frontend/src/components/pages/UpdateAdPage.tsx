@@ -4,6 +4,7 @@ import {useForm, SubmitHandler} from "react-hook-form";
 import { toast } from "react-toastify"
 import {useParams } from "react-router";
 import { useNavigate } from "react-router";
+import { useUpdateAdMutation } from "../../generated/graphql-types";
 
 //Types
 
@@ -42,6 +43,24 @@ type AdProps = {
 
 
 export default function UpdateAdPage () {
+    const { id } = useParams()
+
+    const [] = useUpdateAdMutation({
+        variables: {
+            data: {
+                category:"",
+                description:"",
+                image:"",
+                location:"",
+                owner:"",
+                price:0,
+                tags: [],
+                title:""
+                
+            },
+            updateAdId: Number(id)
+        }
+    })
 
 //Getting the categories from the backend to add to the form
     const [categories, setCategories] = useState<categoryProps[]>([])
@@ -70,7 +89,6 @@ export default function UpdateAdPage () {
     
 //Getting ad from the backend
 const [ad, setAd] = useState<AdProps>()
-const { id } = useParams()
 
 
 async function  getAd() {
