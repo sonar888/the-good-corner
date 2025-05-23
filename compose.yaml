@@ -38,3 +38,5 @@ services:
       POSTGRES_HOST: ${DB_HOST}
     volumes:
       - ./database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
