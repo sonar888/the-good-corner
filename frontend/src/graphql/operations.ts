@@ -20,6 +20,18 @@ query GetAllCategories {
 }`
 ;
 
+export const GET_ALL_CATEGORIES_AND_ADS = gql`
+query GetAllCategoriesAndTags {
+  getAllCategories {
+    id
+    name
+  }
+  getAllTags {
+    id
+    name
+  }
+}`
+
 export const GET_ONE_AD = gql`
 query GetOneAd($adId: Float!) {
   getOneAd(id: $adId) {
@@ -36,6 +48,7 @@ query GetOneAd($adId: Float!) {
         }
     tags {
       name
+      id
     }
   }
 }`
@@ -44,6 +57,14 @@ query GetOneAd($adId: Float!) {
 export const DELETE_AD =gql`
 mutation DeleteAd($deleteAdId: Float!) {
   deleteAd(id: $deleteAdId)
+}`
+;
+
+export const CREATE_AD = gql`
+mutation CreateAd($data: AdInput!) {
+  createAd(data: $data) {
+    id
+  }
 }`
 ;
 

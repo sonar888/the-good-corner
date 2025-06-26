@@ -15,5 +15,5 @@ export const dataSource = new DataSource({
     database: DB_DATABASE,
     entities: [Ad, Category, Tag],
     synchronize: true,
-    // logging: ["error", "query"]
+    logging: ["error", "query"]
 });

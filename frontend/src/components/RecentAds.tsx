@@ -2,6 +2,7 @@ import AdCard from "./AdCard"
 import { useGetAllAdsQuery } from "../generated/graphql-types"
 
 
+
 export default function RecentAds () {
 
   const {data, error, loading} = useGetAllAdsQuery()
@@ -25,7 +26,7 @@ export default function RecentAds () {
                   <div key={ad.id}>
                     <AdCard 
                       image= {ad.image}
-                      link= {`http://localhost:5173/ad/${ad.id}`}
+                      link= {`ad/${ad.id}`} // remplace le chemin vs ajoute le chemin
                       title= {ad.title}
                       price = {ad.price}/>
                   </div>

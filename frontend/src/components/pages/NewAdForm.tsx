@@ -1,165 +1,141 @@
-import axios from "axios"
-import {useEffect, useState } from "react"
-import {useForm, SubmitHandler, useFieldArray} from "react-hook-form";
-import { toast } from "react-toastify"
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  AdInput,
+  useCreateAdMutation,
+  useGetAllCategoriesAndTagsQuery,
+} from "../../generated/graphql-types";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import { GET_ALL_ADS } from "../../graphql/operations";
 
-// price accepts string
-//how to type the categories in formInput defaultValue=""Props
+const NewAdForm = () => {
+  const navigate = useNavigate();
 
-//Types
+  // bellow is a way to ask apollo to refetch somes queries
+  /*   const client = useApolloClient();
+  await client.refetchQueries({
+    include: [GET_ALL_ADS],
+  }); */
 
-type categoryProps = {
-    id: number;
-    name: string
-}
+  const { error, loading, data } = useGetAllCategoriesAndTagsQuery();
 
-type tagsProps = categoryProps
+  // useing the refetch queries here, if the mutation succeed, the GET_ALL_ADS will be re-executed
+  const [createAd] = useCreateAdMutation({
+    refetchQueries: [
+      {
+        query: GET_ALL_ADS,
+      },
+    ],
+  });
+  const { register, handleSubmit } = useForm<AdInput>();
 
-type formInputProps = {
-    title: string;
-    description: string;
-    owner: string;
-    price: number;
-    location: string;
-    image: string;
-    category: categoryProps;
-    tags: [string]
-}
+  const onSubmit: SubmitHandler<AdInput> = async (data) => {
+    try {
+      const sanitizedData = { ...data, price: Number(data.price) };
 
-
-
-export default function NewAdForm () {
-
-//Getting the categories from the backend to add to the form
-    const [categories, setCategories] = useState<categoryProps[]>([])
-    const [tags, setTags] = useState<tagsProps[]>([])
-    
-    async function  getCategories() {
-        const results = await axios.get<categoryProps[]>("http://localhost:3000/categories")
-        console.log(results)
-        setCategories(results.data)
+      const { data: newAdData } = await createAd({
+        variables: { data: sanitizedData },
+      });
+      // bellow the version without the destructuration / alias
+      // const result = await createAd({ variables: { data: newData } });
+      // const newAdData = result.data;
+      navigate(`/ad/${newAdData?.createAd.id}`, { replace: true });
+    } catch {
+      toast.error("Une error !");
     }
+  };
 
-    async function  getTags() {
-        const results = await axios.get<tagsProps[]>("http://localhost:3000/tags")
-        console.log(results)
-        setTags(results.data)
-    }
+  if (loading) return <p>Wait for it...</p>;
+  if (error) return <p>Woops, on a tout cassé</p>;
 
-    useEffect(() => {
-        getCategories()
-        getTags()
-    
-    }, [])
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label>
+        Titre
+        <input
+          defaultValue={"Je vends ma 206"}
+          {...register("title", { required: true })}
+        />
+      </label>
 
-    const categoriesChildren = categories.map((category) => {
-        return (
-            <option value={category.id} key={category.id}>{category.name}</option>
-        )
-    })
+      <br />
 
-    
+      <label>
+        Description
+        <input
+          defaultValue={"Ma 206 est super"}
+          {...register("description", { required: true })}
+        />
+      </label>
 
+      <br />
 
+      <label>
+        Vendeur
+        <input
+          defaultValue={"John Doe"}
+          {...register("owner", { required: true })}
+        />
+      </label>
 
-// Handling the input defaultValue="" from the form
+      <br />
 
-const { register, handleSubmit,  formState: {errors}} = useForm<formInputProps>()
+      <label>
+        Ville
+        <input
+          defaultValue={"Paris"}
+          {...register("location", { required: true })}
+        />
+      </label>
 
+      <br />
 
+      <label>
+        Image
+        <input
+          defaultValue={
+            "https://www.actuauto.fr/wp-content/uploads/2021/01/Peugeot-206-scaled.jpg"
+          }
+          {...register("image", { required: true })}
+        />
+      </label>
 
+      <br />
 
+      <label>
+        Prix
+        <input
+          type="number"
+          defaultValue={4000}
+          {...register("price", { required: true })}
+        />
+      </label>
 
+      <br />
 
+      <label>
+        Categorie
+        <select {...register("category", { required: true })}>
+          {data?.getAllCategories.map((category) => (
+            <option value={category.id} key={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </label>
 
-    const handleForm: SubmitHandler<formInputProps> = (data) =>  {
-        
-        axios.post("http://localhost:3000/ad", {...data})
-          .then((response) => {
-                toast.success("Success")
-                console.log(response)
-            })
-            .catch(function (error) {
-                toast.error("Something went wrong")
-                console.log(error);
-            });
-    
-    
-    
-    console.log(data)
+      <br />
+      {data?.getAllTags.map((tag) => (
+        <div key={tag.id}>
+          <label>
+            {tag.name}
+            <input value={tag.id} type="checkbox" {...register("tags")} />
+          </label>
+        </div>
+      ))}
 
-    }
-
-   
-
-    
-
-
-    return (
-        <form onSubmit={handleSubmit(handleForm)}>
-            {/* <input defaultValue="" type="text" defaultValue="yay" {...register("example", {required: true})} />
-            {errors.example && <span>This field is required</span>} */}
-            <label >
-                Titre de l'annonce
-                <input defaultValue="Une belle voiture" type="text" className="text-field" {...register("title", {required: true})}/>
-                {errors.title && <span>This field is required</span>}
-            </label>
-            <br/>
-
-            <label >
-                Description du produit
-                <input defaultValue="Nouvelle! C'est pas une arnaque, promis!!!" type="text"  className="text-field" {...register("description")}/>
-            </label>
-            <br/>
-
-            <label >
-                Prix
-                <input defaultValue="100" type="number"  className="text-field" {...register("price", {required: true, min: 1, max: 100})}/>
-                {errors.price && <span>This field is required, the price must be between 1 and 100</span>}
-            </label>
-            <br/>
-
-            <label >
-                Vendeur
-                <input defaultValue="John PasLouch's" type="text"  className="text-field" {...register("owner")}/>
-            </label>
-            <br/>
-
-            <label >
-                Adresse
-                <input defaultValue="Marseille" type="text"  className="text-field" {...register("location", {required: true})}/>
-                
-            </label>
-            <br/>
-
-            <label >
-                Une image pour illustrer
-                <input defaultValue="https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?cs=srgb&dl=pexels-pixabay-210019.jpg&fm=jpg" type="text"  className="text-field" {...register("image")}/>
-            </label>
-            <br/>
-
-            <label>
-                La catégorie
-                <select {...register("category", {required: true})}>
-                    {categoriesChildren}
-                </select>
-            </label>
-
-            <div>
-                Sélectionne les tags: 
-                {tags.map((tag)=>{
-                    return (
-                        <div key={tag.id}>
-                            <label >
-                                {tag.name}
-                                <input value={tag.id} type="checkbox" key={tag.id} {...register(`tags`)} />
-                            </label> 
-                        </div>
-                           
-        )
-    })}
-            </div>
-            <button className="button">Envoyer</button>
-        </form>
-    )
+      <input type="submit" />
+    </form>
+  );
 };
+export default NewAdForm;

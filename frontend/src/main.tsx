@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client"
 
 const client = new ApolloClient({
-  uri: "http://localhost:3000",
+  uri: "http://localhost:12345",
   cache: new InMemoryCache(),
 });
 

@@ -1,5 +1,6 @@
 import { Category } from "../entities/Category";
 import { Ad } from "../entities/Ad";
+import { Tag } from "../entities/Tag";
 import { ID, Arg, Field, InputType, Query, Mutation, Resolver } from "type-graphql";
 import { FindManyOptions } from "typeorm";
 

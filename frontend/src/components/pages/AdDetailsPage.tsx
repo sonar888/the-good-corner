@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router"
 import {toast} from "react-toastify"
-import { useGetOneAdQuery, useDeleteAdMutation } from "../../generated/graphql-types"
-
+import { useGetOneAdQuery, useDeleteAdMutation, useGetAllAdsQuery } from "../../generated/graphql-types"
+import { GET_ALL_ADS } from "../../graphql/operations"
 
 
 
@@ -13,8 +13,13 @@ export default function AdDetails () {
         variables: { adId: Number(id) },
       })
     const [deleteAd] = useDeleteAdMutation({
-        variables: {deleteAdId:Number(id)}
-    })
+    awaitRefetchQueries: true,
+    refetchQueries: [
+      {
+        query: GET_ALL_ADS,
+      },
+    ],
+  })
 
     
 
@@ -23,7 +28,7 @@ export default function AdDetails () {
     }
     
    if (loading) {
-    return <p>Loading...</p>
+    return <p>Loading Get One Ad...</p>
    }
 
    if(error) {
@@ -42,6 +47,12 @@ export default function AdDetails () {
                     <div className="ad-details-description">
                         {data?.getOneAd.description}
                     </div>
+                    {data?.getOneAd.tags.map((tag)=> {
+                        return (
+                            <div>{tag.name}</div>
+                        )
+                    })}
+                    <div>Catégorie: {data?.getOneAd.category.name}</div>
                     <hr className="separator" />
                     <div className="ad-details-owner">
                         Annoncée publiée par <b>{data?.getOneAd.owner}</b> {new Date(data?.getOneAd.createdDate).toLocaleDateString()} dans la catégorie {data?.getOneAd.category.name}.

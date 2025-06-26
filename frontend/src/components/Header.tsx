@@ -23,11 +23,13 @@ export default function Header () {
 
 
     if (loading) {
+      console.log(loading)
       return <p>Patience, ça charge</p>
     }
 
     if (error){
-      return <p>Oops! Something went wrong...</p>
+      console.log(error)
+      return <p>Oops! C'est la merde...</p>
     }
 
     return (
@@ -36,7 +38,7 @@ export default function Header () {
           <h1>
             <Link to="/" className="button logo link-button">
               <span className="mobile-short-label">TGC</span>
-              <span className="desktop-long-label">THE GOOD CORNER</span>
+              <span className="desktop-long-label">The Good Corner</span>
             </Link>
           </h1>
           <form className="text-field-with-button" onSubmit={Search}>
