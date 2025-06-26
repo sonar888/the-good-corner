@@ -1,0 +1,144 @@
+{
+  "data": {
+    "getAllAds": [
+      {
+        "id": 2,
+        "title": "Veste en cuir homme",
+        "description": "Veste en cuir véritable, taille L, peu portée.",
+        "owner": "Jean Dupont",
+        "image": "https://cdn.laredoute.com/cdn-cgi/image/width=1200,height=1200,fit=pad,dpr=1/products/2/3/7/2377184a0633eebe257a064722ccb3b5.jpg",
+        "location": "Paris",
+        "price": 120,
+        "createdDate": "2025-05-22T10:32:01.128Z",
+        "category": {
+          "id": 2,
+          "name": "vêtements"
+        },
+        "tags": [
+          {
+            "id": 4,
+            "name": "vintage"
+          },
+          {
+            "id": 7,
+            "name": "occasion"
+          },
+          {
+            "id": 8,
+            "name": "rare"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Je vends ma 206",
+        "description": "Ma 206 est super",
+        "owner": "John Doe",
+        "image": "https://www.actuauto.fr/wp-content/uploads/2021/01/Peugeot-206-scaled.jpg",
+        "location": "Paris",
+        "price": 4000,
+        "createdDate": "2025-05-23T14:34:04.582Z",
+        "category": {
+          "id": 3,
+          "name": "voitures"
+        },
+        "tags": [
+          {
+            "id": 7,
+            "name": "occasion"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Guitare acoustique Yamaha",
+        "description": "Bon son, légère usure sur le bois.",
+        "owner": "Paul Girard",
+        "image": "https://images.unsplash.com/photo-1567313280-67a4f43e0e62",
+        "location": "Strasbourg",
+        "price": 180,
+        "createdDate": "2025-05-22T10:32:01.128Z",
+        "category": {
+          "id": 10,
+          "name": "sports"
+        },
+        "tags": []
+      },
+      {
+        "id": 5,
+        "title": "Appartement T2 à louer",
+        "description": "Appartement 45m² rénové, quartier calme.",
+        "owner": "Marc Bernard",
+        "image": "https://images.unsplash.com/photo-1564763224-d24a2f194b6c",
+        "location": "Toulouse",
+        "price": 680,
+        "createdDate": "2025-05-22T10:32:01.128Z",
+        "category": {
+          "id": 5,
+          "name": "immobilier"
+        },
+        "tags": []
+      },
+      {
+        "id": 8,
+        "title": "Collection de BD Tintin",
+        "description": "Lot complet des albums de Tintin.",
+        "owner": "Lucie Renard",
+        "image": "https://images.unsplash.com/photo-1555685812-1b5d7a818699",
+        "location": "Lille",
+        "price": 250,
+        "createdDate": "2025-05-22T10:32:01.128Z",
+        "category": {
+          "id": 8,
+          "name": "livres"
+        },
+        "tags": []
+      },
+      {
+        "id": 6,
+        "title": "Téléviseur Samsung 4K",
+        "description": "Écran 55\", parfait état, télécommande incluse.",
+        "owner": "Claire Dubois",
+        "image": "https://images.unsplash.com/photo-1582719497899-1777425f31cd",
+        "location": "Nice",
+        "price": 300,
+        "createdDate": "2025-05-22T10:32:01.128Z",
+        "category": {
+          "id": 6,
+          "name": "électronique"
+        },
+        "tags": []
+      },
+      {
+        "id": 4,
+        "title": "Chaton persan à adopter",
+        "description": "Chaton de 3 mois, très affectueux.",
+        "owner": "Julie Lefevre",
+        "image": "https://images.unsplash.com/photo-1592194996308-7b43878e84a6",
+        "location": "Marseille",
+        "price": 0,
+        "createdDate": "2025-05-22T10:32:01.128Z",
+        "category": {
+          "id": 4,
+          "name": "animaux"
+        },
+        "tags": []
+      },
+      {
+        "id": 9,
+        "title": "Trotinette électrique",
+        "description": "Autonomie 25 km, légère et pliable.",
+        "owner": "Hugo Caron",
+        "image": "https://images.unsplash.com/photo-1587301042298-51b18bff02d1",
+        "location": "Nantes",
+        "price": 220,
+        "createdDate": "2025-05-22T10:32:01.128Z",
+        "category": {
+          "id": 9,
+          "name": "jouets"
+        },
+        "tags": []
+      }
+    ]
+  }
+}
