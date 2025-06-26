@@ -1,14 +1,14 @@
-import React from 'react'
 import RecentAds from '../src/components/RecentAds'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import {MemoryRouter} from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import ads from './mocks/ads.json'
 
 
 // 👇 Mock the hook from the generated file
 
 const allAds = ads.data.getAllAds
+
 
 vi.mock('../src/generated/graphql-types', () => ({
   useGetAllAdsQuery: () => ({

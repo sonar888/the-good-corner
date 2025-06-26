@@ -14,7 +14,7 @@ export default function AdCard({title, image, price, link}: AdCardProps) {
             <Link className="ad-card-link" to={link}>
                 <img className="ad-card-image" src={image} alt={title}/>
                 <div className="ad-card-text">
-                    <div className="ad-card-title">{title}</div>
+                    <h4 className="ad-card-title">{title}</h4>
                     <div className="ad-card-price">{price} €</div>
                 </div>
             </Link>
