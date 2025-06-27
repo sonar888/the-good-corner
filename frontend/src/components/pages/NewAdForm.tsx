@@ -27,9 +27,10 @@ const NewAdForm = () => {
       },
     ],
   });
-  const { register, handleSubmit } = useForm<AdInput>();
+  const { register, handleSubmit, formState: { errors } } = useForm<AdInput>();
 
   const onSubmit: SubmitHandler<AdInput> = async (data) => {
+    console.log(data)
     try {
       const sanitizedData = { ...data, price: Number(data.price) };
 
@@ -41,9 +42,11 @@ const NewAdForm = () => {
       // const newAdData = result.data;
       navigate(`/ad/${newAdData?.createAd.id}`, { replace: true });
     } catch {
-      toast.error("Une error !");
+      toast.error("An error occurred !");
     }
   };
+
+  
 
   if (loading) return <p>Wait for it...</p>;
   if (error) return <p>Woops, on a tout cassé</p>;
@@ -54,9 +57,11 @@ const NewAdForm = () => {
         Titre
         <input
           defaultValue={"Je vends ma 206"}
-          {...register("title", { required: true })}
+          {...register("title", { required: true, minLength: 3 })}
+          
         />
       </label>
+      {errors.title?.type && <p>Category must have at least 3 characters</p>}
 
       <br />
 

@@ -2,3 +2,4 @@
 .env
 **/database
 **/coverage
+node_modules
