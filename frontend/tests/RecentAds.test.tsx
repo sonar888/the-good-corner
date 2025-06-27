@@ -1,7 +1,7 @@
 import RecentAds from '../src/components/RecentAds'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import ads from './__mocks__/data/ads.json'
 
 const allAds = ads.data.getAllAds

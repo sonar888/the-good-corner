@@ -1,0 +1,128 @@
+{
+  "data": {
+    "getAllCategories": [
+      {
+        "id": 2,
+        "name": "vêtements"
+      },
+      {
+        "id": 3,
+        "name": "voitures"
+      },
+      {
+        "id": 10,
+        "name": "sports"
+      },
+      {
+        "id": 5,
+        "name": "immobilier"
+      },
+      {
+        "id": 8,
+        "name": "livres"
+      },
+      {
+        "id": 6,
+        "name": "électronique"
+      },
+      {
+        "id": 4,
+        "name": "animaux"
+      },
+      {
+        "id": 9,
+        "name": "jouets"
+      },
+      {
+        "id": 11,
+        "name": "outils"
+      },
+      {
+        "id": 12,
+        "name": "multimédia"
+      },
+      {
+        "id": 15,
+        "name": "jardin"
+      },
+      {
+        "id": 13,
+        "name": "accessoires"
+      },
+      {
+        "id": 16,
+        "name": "services"
+      },
+      {
+        "id": 14,
+        "name": "musique"
+      },
+      {
+        "id": 7,
+        "name": "meubles"
+      }
+    ],
+    "getAllTags": [
+      {
+        "id": 4,
+        "name": "vintage"
+      },
+      {
+        "id": 7,
+        "name": "occasion"
+      },
+      {
+        "id": 8,
+        "name": "rare"
+      },
+      {
+        "id": 10,
+        "name": "collection"
+      },
+      {
+        "id": 15,
+        "name": "à restaurer"
+      },
+      {
+        "id": 6,
+        "name": "comme neuf"
+      },
+      {
+        "id": 11,
+        "name": "artisanal"
+      },
+      {
+        "id": 12,
+        "name": "bon état"
+      },
+      {
+        "id": 2,
+        "name": "usagé"
+      },
+      {
+        "id": 13,
+        "name": "défectueux"
+      },
+      {
+        "id": 5,
+        "name": "ancien"
+      },
+      {
+        "id": 1,
+        "name": "neuf"
+      },
+      {
+        "id": 3,
+        "name": "reconditionné"
+      },
+      {
+        "id": 14,
+        "name": "divers"
+      },
+      {
+        "id": 9,
+        "name": "fait main"
+      }
+    ]
+  }
+}
